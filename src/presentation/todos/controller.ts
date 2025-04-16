@@ -1,9 +1,9 @@
 import { Request, Response } from "express"
 
 const todos = [
-    {id: 1, text: 'buy milk', createdAt: new Date()},
-    {id: 2, text: 'buy bread', createdAt: null},
-    {id: 3, text: 'buy butter', createdAt: new Date()},
+    { id: 1, text: 'buy milk', completedAt: new Date() },
+    { id: 2, text: 'buy bread', completedAt: null },
+    { id: 3, text: 'buy butter', completedAt: new Date() },
 ];
 
 export class TodosController {
@@ -21,14 +21,77 @@ export class TodosController {
 
     public getTodoById = (req: Request, res: Response) => {
         const id = +req.params.id;
-        if(isNaN(id)) res.status(400).json({error: `ID argument is not a number`});
+        if (isNaN(id)) {
+            res.status(400).json({ error: `ID argument is not a number` });
+            return;
+        }
 
         const todo = todos.find(todo => todo.id === id);
-        
+
         (todo) ? res.json(todo) : res.status(400).json({
             error: `Todo with id ${id} not found`
-        })
+        });
+    }
 
-        
+    public createTodo = (req: Request, res: Response) => {
+        const { text } = req.body;
+        if (!text) {
+            res.status(400).json({ error: `text property is required` });
+
+            return;
+        }
+
+        const newTodo = {
+            id: todos.length + 1,
+            text: text,
+            completedAt: null
+        }
+
+        todos.push(newTodo);
+
+        res.json(newTodo);
+    }
+
+    public updateTodo = (req: Request, res: Response) => {
+        const id = +req.params.id;
+        if (isNaN(id)) {
+            res.status(400).json({ error: `ID argument is not a number` });
+            return;
+        }
+
+        const todo = todos.find(todo => todo.id === id);
+        if (!todo) {
+            res.status(400).json({ error: `Todo with id ${id} not found` });
+            return;
+        }
+
+        const { text, completedAt } = req.body;
+        // if (!text) {
+        //     res.status(400).json({ error: `text property is required` });
+        //     return;
+        // }
+
+        todo.text = text || todo.text;
+        (completedAt === 'null') ? todo.completedAt = null : todo.completedAt = new Date(completedAt || todo.completedAt);
+
+        res.json(todo);
+    }
+
+    public deleteTodo = (req: Request, res: Response) => {
+        const id = +req.params.id;
+        if (isNaN(id)) {
+            res.status(400).json({ error: `ID argument is not a number` });
+            return;
+        }
+
+        const todo = todos.find(todo => todo.id === id);
+        if (!todo) {
+            res.status(400).json({ error: `Todo with id ${id} not found` });
+            return;
+        }
+
+        // todos.filter(todo => todo.id !== id);
+        todos.splice(todos.indexOf(todo), 1);
+        res.json(todo);
     }
 }
