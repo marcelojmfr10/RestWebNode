@@ -2,5 +2,8 @@
 node_modules
 /keys
 
+/postgres
+/src/generated
+
 .env
 .env.test
