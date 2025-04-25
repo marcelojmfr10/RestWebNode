@@ -1,6 +1,7 @@
 
 node_modules
 /keys
+dist
 
 /postgres
 /src/generated
