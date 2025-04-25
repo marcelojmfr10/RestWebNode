@@ -1,6 +1,7 @@
 
 import express, { Router } from 'express';
 import path from 'path';
+import compression from 'compression';
 
 interface Options {
     port: number;
@@ -27,6 +28,7 @@ export class Server {
         //* middlewares
         this.app.use(express.json()); //para que serialize un json
         this.app.use(express.urlencoded({ extended: true })) //x-www-form-urlencoded
+        this.app.use(compression());
 
         //* public folder
         this.app.use(express.static(this.publicPath));
