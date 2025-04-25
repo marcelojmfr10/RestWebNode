@@ -2,6 +2,7 @@
 node_modules
 /keys
 dist
+/coverage
 
 /postgres
 /src/generated
