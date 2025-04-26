@@ -5,7 +5,7 @@ jest.mock('../src/presentation/server');
 
 
 describe('App.ts', () => {
-  test('should call server with arguments and start', async() => {
+  test('should call server with arguments and start', async () => {
     await import('../src/app');
 
     expect(Server).toHaveBeenCalled();
