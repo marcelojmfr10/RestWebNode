@@ -1,30 +1,31 @@
-import { CreateTodoDto, TodoDatasource, TodoEntity, TodoRepository, UpdateTodoDto } from "../../domain";
-
+import {
+  CreateTodoDto,
+  TodoDatasource,
+  TodoEntity,
+  TodoRepository,
+  UpdateTodoDto,
+} from "../../domain";
 
 export class TodoRepositoryImpl implements TodoRepository {
+  constructor(private readonly datasource: TodoDatasource) {}
 
-    constructor(private readonly datasource: TodoDatasource){
+  create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
+    return this.datasource.create(createTodoDto);
+  }
 
-    }
+  getAll(): Promise<TodoEntity[]> {
+    return this.datasource.getAll();
+  }
 
-    create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
-        return this.datasource.create(createTodoDto);
-    }
+  findById(id: number): Promise<TodoEntity> {
+    return this.datasource.findById(id);
+  }
 
-    getAll(): Promise<TodoEntity[]> {
-        return this.datasource.getAll();
-    }
+  updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
+    return this.datasource.updateById(updateTodoDto);
+  }
 
-    findById(id: number): Promise<TodoEntity> {
-        return this.datasource.findById(id);
-    }
-
-    updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
-        return this.datasource.updateById(updateTodoDto);
-    }
-    
-    deleteById(id: number): Promise<TodoEntity> {
-        return this.datasource.deleteById(id);
-    }
-
+  deleteById(id: number): Promise<TodoEntity> {
+    return this.datasource.deleteById(id);
+  }
 }

@@ -1,36 +1,35 @@
-import fs from 'fs';
-import http from 'http';
+import fs from "fs";
+import http from "http";
 
 const server = http.createServer((req, res) => {
-    console.log(req.url);
-   
-    // res.writeHead(200, {'Content-Type': 'text-html'});
-    // res.write(`<h1>url ${req.url}</h1>`);
-    // res.end();
+  console.log(req.url);
 
-    // const data = {name: 'marcelo', age: 30, city: 'new york'};
-    // res.writeHead(200, {'Content-Type': 'application/json'});
-    // res.end(JSON.stringify(data));
+  // res.writeHead(200, {'Content-Type': 'text-html'});
+  // res.write(`<h1>url ${req.url}</h1>`);
+  // res.end();
 
-    if(req.url === '/'){
-        const htmlFile = fs.readFileSync('./public/index.html', 'utf-8');
-        res.writeHead(200, {'Content-Type': 'text-html'});
-        res.end(htmlFile);
+  // const data = {name: 'marcelo', age: 30, city: 'new york'};
+  // res.writeHead(200, {'Content-Type': 'application/json'});
+  // res.end(JSON.stringify(data));
 
-        return;
-    }
+  if (req.url === "/") {
+    const htmlFile = fs.readFileSync("./public/index.html", "utf-8");
+    res.writeHead(200, { "Content-Type": "text-html" });
+    res.end(htmlFile);
 
-    if (req.url?.endsWith('.js')){
-        res.writeHead(200, {'Content-Type': 'application/javascript'});
-    } else if (req.url?.endsWith('.css')){
-        res.writeHead(200, {'Content-Type': 'text/css'});
-    }
+    return;
+  }
 
-    const responseContent = fs.readFileSync(`./public${req.url}`, 'utf-8');
-    res.end(responseContent);
+  if (req.url?.endsWith(".js")) {
+    res.writeHead(200, { "Content-Type": "application/javascript" });
+  } else if (req.url?.endsWith(".css")) {
+    res.writeHead(200, { "Content-Type": "text/css" });
+  }
+
+  const responseContent = fs.readFileSync(`./public${req.url}`, "utf-8");
+  res.end(responseContent);
 });
 
 server.listen(8080, () => {
-    console.log('server running on port 8080');
+  console.log("server running on port 8080");
 });
-

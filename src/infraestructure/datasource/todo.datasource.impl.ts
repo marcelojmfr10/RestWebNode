@@ -1,50 +1,51 @@
-import { CreateTodoDto, TodoDatasource, TodoEntity, UpdateTodoDto } from "../../domain";
+import {
+  CreateTodoDto,
+  TodoDatasource,
+  TodoEntity,
+  UpdateTodoDto,
+} from "../../domain";
 import { prisma } from "../../data/postgres";
 import { CustomError } from "../../domain";
 
-
-
 export class TodoDataSourceImpl implements TodoDatasource {
-    
-    async create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
-        const todo = await prisma.todo.create({
-            data: createTodoDto!
-        });
+  async create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
+    const todo = await prisma.todo.create({
+      data: createTodoDto!,
+    });
 
-        return TodoEntity.fromObject(todo);
-    }
+    return TodoEntity.fromObject(todo);
+  }
 
-    async getAll(): Promise<TodoEntity[]> {
-        const todos = await prisma.todo.findMany();
-        return todos.map(todo => TodoEntity.fromObject(todo));
-    }
+  async getAll(): Promise<TodoEntity[]> {
+    const todos = await prisma.todo.findMany();
+    return todos.map((todo) => TodoEntity.fromObject(todo));
+  }
 
-    async findById(id: number): Promise<TodoEntity> {
-        const todo = await prisma.todo.findFirst({ where: { id } });
+  async findById(id: number): Promise<TodoEntity> {
+    const todo = await prisma.todo.findFirst({ where: { id } });
 
-        if (!todo) throw new CustomError(`Todo with id ${id} not found`, 404);
+    if (!todo) throw new CustomError(`Todo with id ${id} not found`, 404);
 
-        return TodoEntity.fromObject(todo);
-    }
+    return TodoEntity.fromObject(todo);
+  }
 
-    async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
-        await this.findById(updateTodoDto.id);
+  async updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
+    await this.findById(updateTodoDto.id);
 
-        const updatedTodo = await prisma.todo.update({
-            where: { id: updateTodoDto.id },
-            data: updateTodoDto!.values
-        });
+    const updatedTodo = await prisma.todo.update({
+      where: { id: updateTodoDto.id },
+      data: updateTodoDto!.values,
+    });
 
-        return TodoEntity.fromObject(updatedTodo);
-    }
-    
-    async deleteById(id: number): Promise<TodoEntity> {
-        await this.findById(id);
-        const deleted = await prisma.todo.delete({
-            where: { id }
-        });
+    return TodoEntity.fromObject(updatedTodo);
+  }
 
-        return TodoEntity.fromObject(deleted);
-    }
+  async deleteById(id: number): Promise<TodoEntity> {
+    await this.findById(id);
+    const deleted = await prisma.todo.delete({
+      where: { id },
+    });
 
+    return TodoEntity.fromObject(deleted);
+  }
 }
